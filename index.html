@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no" />
+  <title>AutoMobil — Jual Beli Mobil Baru & Bekas | Chat WhatsApp | Dealer Resmi</title>
+  <meta name="description" content="Marketplace mobil baru & bekas. Chat WhatsApp langsung, badge Dealer Resmi, foto wajib 6 sisi, dan filter lengkap.">
+  <meta name="keywords" content="jual beli mobil, mobil bekas, mobil baru, dealer resmi, marketplace mobil, whatsapp">
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://dixs-bot.github.io/ecomerce/" />
+  <meta name="theme-color" content="#0ea5e9">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="AutoMobil — Jual Beli Mobil Baru & Bekas" />
+  <meta property="og:description" content="Marketplace mobil baru & bekas dengan chat WhatsApp dan badge Dealer Resmi." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dixs-bot.github.io/ecomerce/" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1200&auto=format&fit=crop" />
+
+  <!-- JSON-LD: Organization + WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"AutoMobil",
+    "url":"https://dixs-bot.github.io/ecomerce/",
+    "logo":"https://dummyimage.com/600x600/0ea5e9/ffffff&text=AutoMobil",
+    "sameAs":[]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "url":"https://dixs-bot.github.io/ecomerce/",
+    "name":"AutoMobil",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://dixs-bot.github.io/ecomerce/?q={search_term_string}",
+      "query-input":"required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Gaya & Aplikasi -->
+  <link rel="stylesheet" href="./gaya.css?v=3" />
+</head>
+<body>
+  <header class="header">
+    <div class="container row sb">
+      <a class="brand" href="#" aria-label="AutoMobil Beranda">
+        <span class="logo">🚗</span> <strong>AutoMobil</strong>
+      </a>
+      <nav class="nav">
+        <a href="#katalog" class="nav-link">Katalog</a>
+        <button id="btnOpenAdd" class="btn primary">+ Tambah Iklan</button>
+        <button id="btnAuth" class="btn ghost">Masuk / Daftar</button>
+        <div id="userMenu" class="user-menu hidden">
+          <span id="userName"></span>
+          <button id="btnLogout" class="btn danger ghost">Keluar</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>Jual Beli Mobil Baru & Bekas</h1>
+      <p>Fokus mobil saja. Chat WhatsApp langsung, badge Dealer Resmi untuk kepercayaan maksimal.</p>
+      <form id="searchForm" class="search-bar" role="search" aria-label="Pencarian Mobil">
+        <input id="searchInput" type="search" placeholder="Cari: Avanza, Civic, Pajero..." aria-label="Kata kunci pencarian">
+        <button class="btn primary" type="submit">Cari</button>
+      </form>
+      <div class="filters">
+        <select id="filterKondisi" aria-label="Filter kondisi">
+          <option value="">Kondisi: Semua</option>
+          <option value="Baru">Baru</option>
+          <option value="Bekas">Bekas</option>
+        </select>
+        <select id="filterBrand" aria-label="Filter merek">
+          <option value="">Merek: Semua</option>
+        </select>
+        <select id="sortSelect" aria-label="Urutkan">
+          <option value="terbaru">Terbaru</option>
+          <option value="termurah">Termurah</option>
+          <option value="termahal">Termahal</option>
+          <option value="tahun-terbaru">Tahun Terbaru</option>
+        </select>
+        <button id="btnResetFilter" class="btn ghost" type="button">Reset</button>
+      </div>
+    </section>
+
+    <section id="katalog" class="container">
+      <div id="grid" class="grid"></div>
+      <div id="emptyState" class="empty hidden">Belum ada listing. Jadilah yang pertama!</div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> AutoMobil. Fokus jual beli mobil. Terintegrasi WhatsApp.</p>
+    </div>
+  </footer>
+
+  <!-- Modal: Auth -->
+  <dialog id="authModal" class="modal">
+    <div class="modal-header">
+      <h3>Masuk / Daftar</h3>
+      <button class="icon-btn" data-close="authModal" aria-label="Tutup">✕</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="loginTab">Masuk</button>
+      <button class="tab" data-tab="registerTab">Daftar</button>
+    </div>
+    <div class="tab-panels">
+      <div id="loginTab" class="tab-panel active">
+        <form id="loginForm" class="form">
+          <label>Email
+            <input type="email" name="email" required autocomplete="email">
+          </label>
+          <label>Kata Sandi
+            <input type="password" name="password" required autocomplete="current-password" minlength="6">
+          </label>
+          <button class="btn primary" type="submit">Masuk</button>
+        </form>
+      </div>
+      <div id="registerTab" class="tab-panel">
+        <form id="registerForm" class="form">
+          <label>Nama Lengkap
+            <input type="text" name="name" required>
+          </label>
+          <label>Email
+            <input type="email" name="email" required autocomplete="email">
+          </label>
+          <label>No. WhatsApp (format internasional, contoh 62812xxxx)
+            <input type="tel" name="whatsapp" pattern="^\\d{9,15}$" required>
+          </label>
+          <label>Kata Sandi (min. 6)
+            <input type="password" name="password" minlength="6" required autocomplete="new-password">
+          </label>
+          <label>Daftar sebagai
+            <select name="role" required>
+              <option value="konsumen">Konsumen</option>
+              <option value="sales_dealer_resmi">Sales Dealer Resmi</option>
+              <option value="penjual_non_dealer">Penjual Non-Dealer / Semi</option>
+            </select>
+          </label>
+          <div id="dealerExtra" class="row wrap">
+            <label>Merek Dealer Resmi
+              <select name="brandDealer">
+                <option value="">Pilih Merek</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Honda">Honda</option>
+                <option value="Suzuki">Suzuki</option>
+                <option value="Daihatsu">Daihatsu</option>
+                <option value="Mitsubishi">Mitsubishi</option>
+                <option value="Nissan">Nissan</option>
+                <option value="Hyundai">Hyundai</option>
+                <option value="Wuling">Wuling</option>
+                <option value="Mazda">Mazda</option>
+                <option value="BMW">BMW</option>
+                <option value="Mercedes-Benz">Mercedes-Benz</option>
+              </select>
+            </label>
+            <label>Upload Name Tag (wajib untuk Dealer Resmi)
+              <input type="file" name="nameTag" accept="image/*">
+            </label>
+          </div>
+          <p class="help">Catatan: Name tag opsional untuk penjual non-dealer, wajib untuk Sales Dealer Resmi.</p>
+          <button class="btn primary" type="submit">Buat Akun</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal: Tambah Iklan -->
+  <dialog id="listingModal" class="modal large">
+    <div class="modal-header">
+      <h3>Tambah Iklan Mobil</h3>
+      <button class="icon-btn" data-close="listingModal" aria-label="Tutup">✕</button>
+    </div>
+    <form id="listingForm" class="form scroll">
+      <div class="row wrap">
+        <label>Jenis Barang
+          <select name="jenisBarang" required>
+            <option value="Mobil" selected>Mobil</option>
+            <option value="Non-Mobil">Non-Mobil (ditolak)</option>
+          </select>
+        </label>
+        <label>Nama Mobil
+          <input type="text" name="title" required placeholder="Contoh: Toyota Avanza G 2019">
+        </label>
+        <label>Deskripsi
+          <textarea name="description" rows="3" required placeholder="Kondisi terawat, servis rutin, tangan pertama..."></textarea>
+        </label>
+        <label>Kondisi
+          <select name="kondisi" required>
+            <option value="Bekas">Bekas</option>
+            <option value="Baru">Baru</option>
+          </select>
+        </label>
+        <label>Merek
+          <input type="text" name="brand" required placeholder="Toyota, Honda, ...">
+        </label>
+        <label>Tahun Kendaraan
+          <input type="number" name="tahun" min="1980" max="2100" required>
+        </label>
+        <label>Harga (Rp)
+          <input type="number" name="harga" min="0" step="1000000" required>
+        </label>
+        <label>Negosiasi?
+          <select name="nego">
+            <option value="true">Bisa Nego</option>
+            <option value="false">Harga Pas</option>
+          </select>
+        </label>
+        <label>Kilometer
+          <input type="number" name="kilometer" min="0" step="1000" required>
+        </label>
+        <label>Transmisi
+          <select name="transmisi" required>
+            <option value="Automatic">Automatic</option>
+            <option value="Manual">Manual</option>
+          </select>
+        </label>
+        <label>Bahan Bakar
+          <select name="bahanBakar" required>
+            <option value="Bensin">Bensin</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="Listrik">Listrik</option>
+          </select>
+        </label>
+        <label>Alamat / Lokasi Unit
+          <input type="text" name="alamat" required placeholder="Kota, Kecamatan, detail alamat">
+        </label>
+        <label>Pajak Aktif?
+          <select name="pajakAktif" required>
+            <option value="true">Aktif</option>
+            <option value="false">Tidak Aktif</option>
+          </select>
+        </label>
+        <label>Masa Berlaku Pajak s.d.
+          <input type="date" name="pajakBerlakuSampai">
+        </label>
+      </div>
+
+      <fieldset class="photos">
+        <legend>Foto Wajib (6 sisi)</legend>
+        <div class="grid photos-grid">
+          <label>Depan
+            <input type="file" name="fotoDepan" accept="image/*" required>
+          </label>
+          <label>Samping Kiri
+            <input type="file" name="fotoKiri" accept="image/*" required>
+          </label>
+          <label>Samping Kanan
+            <input type="file" name="fotoKanan" accept="image/*" required>
+          </label>
+          <label>Belakang
+            <input type="file" name="fotoBelakang" accept="image/*" required>
+          </label>
+          <label>Interior 1 (Dashboard)
+            <input type="file" name="fotoInterior1" accept="image/*" required>
+          </label>
+          <label>Interior 2 (Kabin/Bagasi)
+            <input type="file" name="fotoInterior2" accept="image/*" required>
+          </label>
+        </div>
+        <div id="photoPreviews" class="photo-previews"></div>
+      </fieldset>
+
+      <p class="help">Catatan: Hanya menerima kategori Mobil. Jika Anda memilih Non-Mobil, sistem akan menolak dengan pesan error.</p>
+      <button class="btn primary" type="submit">Pasang Iklan</button>
+    </form>
+  </dialog>
+
+  <!-- Modal: Detail Produk -->
+  <dialog id="productModal" class="modal large">
+    <div class="modal-header">
+      <h3 id="pdTitle">Detail Mobil</h3>
+      <button class="icon-btn" data-close="productModal" aria-label="Tutup">✕</button>
+    </div>
+    <div id="pdBody" class="pd-body"></div>
+  </dialog>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="./aplikasi.js?v=3" defer></script>
+</body>
+</html>
