@@ -24,6 +24,7 @@ a{color:inherit;text-decoration:none}
 .nav-link{padding:8px 10px;border-radius:8px}
 .nav-link:hover{background:var(--card)}
 
+
 .hero{padding:40px 16px 20px}
 .hero h1{margin:0 0 8px}
 .hero p{margin:0 0 16px;color:var(--muted)}
